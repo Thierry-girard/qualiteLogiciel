@@ -17,58 +17,69 @@ func scoreChecker(input []Frame, expectedScore int, expectedError error) error {
 	return nil
 }
 
-/*func TestNullScore(t *testing.T) {
+func TestNullScore(t *testing.T) {
 	input := []Frame{}
 	expected := 0
-	if err := scoreChecker(input, expected, nil); err != nil {
+    expectedError := fmt.Errorf("Game is empty")
+	if err := scoreChecker(input, expected, expectedError); err != nil {
 		t.Fatalf("%+v\n", err)
 	}
+ 	input = []Frame{{0, 2}, {5, 1}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}}
+	expected = 84
+	expectedError = nil
+	if err := scoreChecker(input, expected, expectedError); err != nil {
+		t.Fatalf("%+v\n", err)
+	}   
 }
+
 func TestScore(t *testing.T) {
-	input := []Frame{{7, 5}, {13, -2}}
-	expected := 23
+	input := []Frame{{0, 2}, {5, 1}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}}
+	expected := 84
 	if err := scoreChecker(input, expected, nil); err != nil {
 		t.Fatalf("%+v\n", err)
-	}
-	input = []Frame{{0, 2}, {5, 1}}
-	expected = 8
-	if err := scoreChecker(input, expected, nil); err != nil {
-		t.Fatalf("%+v\n", err)
-	}
-}*/
+	}  
+}
 
 
-func TestSizeScore(t *testing.T) {
+func TestSizeInf(t *testing.T) {
 	input := []Frame{{7, 5}, {13, 2}}
 	expected := 0
 	expectedError := fmt.Errorf("Game Size < 10")
 	if err := scoreChecker(input, expected, expectedError); err != nil {
 		t.Fatalf("%+v\n", err)
 	}
-	input = []Frame{{0, 2}, {5, 1}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}}
-	expected = 116
+	input = []Frame{{0, 2}, {5, 1}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}}
+	expected = 84
 	expectedError = nil
-	if err := scoreChecker(input, expected, expectedError); err != nil {
-		t.Fatalf("%+v\n", err)
-	}
-	input = []Frame{{0, 2}, {5, 1}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {13, 2}}
-	expected = 0
-	expectedError = fmt.Errorf("Game Size > 10")
 	if err := scoreChecker(input, expected, expectedError); err != nil {
 		t.Fatalf("%+v\n", err)
 	}
 }
 
+func TestSizeSup(t *testing.T) {
+    input := []Frame{{0, 2}, {5, 1}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {13, 2}}
+	expected := 0
+	expectedError := fmt.Errorf("Game Size > 10")
+	if err := scoreChecker(input, expected, expectedError); err != nil {
+		t.Fatalf("%+v\n", err)
+	}
+    input = []Frame{{0, 2}, {5, 1}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}}
+	expected = 84
+	expectedError = nil
+	if err := scoreChecker(input, expected, expectedError); err != nil {
+		t.Fatalf("%+v\n", err)
+	}
+}
 
-func TestScorePositif(t *testing.T) {
-	input := []Frame{{0, 2}, {5, 1}, {7, 5}, {13, -2}, {7, 5}, {13, -2}, {7, 5}, {13, -2}, {7, 5}, {13, -2}}
+func TestTuplePositifOuNul(t *testing.T) {
+	input := []Frame{{0, -2}, {5, 1}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}}
 	expected := 0
 	expectedError := fmt.Errorf("Negative value")
 	if err := scoreChecker(input, expected, expectedError); err != nil {
 		t.Fatalf("%+v\n", err)
 	}
-	input = []Frame{{0, 2}, {5, 1}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}}
-	expected = 116
+	input = []Frame{{0, 2}, {5, 1}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}, {7, 2}, {8, 2}}
+	expected = 84
 	expectedError = nil
 	if err := scoreChecker(input, expected, expectedError); err != nil {
 		t.Fatalf("%+v\n", err)
@@ -76,9 +87,9 @@ func TestScorePositif(t *testing.T) {
 }
 
 func TestScoreFrame(t *testing.T) {
-	input := []Frame{{0, 2}, {5, 1}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}}
+	input := []Frame{{9, 2}, {5, 1}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {13, 2}, {7, 5}, {7, 2}}
 	expected := 0
-	expectedError := fmt.Errorf("Negative value")
+	expectedError := fmt.Errorf("Value Error : Frame > 10")
 	if err := scoreChecker(input, expected, expectedError); err != nil {
 		t.Fatalf("%+v\n", err)
 	}

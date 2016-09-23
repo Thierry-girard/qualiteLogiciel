@@ -9,6 +9,9 @@ type Frame struct {
 
 func GetScore(game []Frame) (int, error) {
 	score := 0
+    if len(game) == 0  || game == nil {
+        return 0, fmt.Errorf("Game is empty")
+    }
 	if len(game) < 10{
 		return 0, fmt.Errorf("Game Size < 10")
 	}
@@ -23,7 +26,7 @@ func GetScore(game []Frame) (int, error) {
 		if game[i].firstThrow + game[i].secondThrow > 10{
 			return 0, fmt.Errorf("Value Error : Frame > 10")
 		}
-		score = score + game[i].firstThrow + game[i].secondThrow
+        //score = score + game[i].firstThrow + game[i].secondThrow
 	}
 	return score, nil
 }
