@@ -9,6 +9,8 @@ type Frame struct {
 
 func GetScore(game []Frame) (int, error) {
 	score := 0
+	onze := 0
+	douze := 0
     if len(game) == 0  || game == nil {
         return 0, fmt.Errorf("Game is empty")
     }
@@ -17,6 +19,13 @@ func GetScore(game []Frame) (int, error) {
 	}
 	if len(game) > 10{
 		return 0, fmt.Errorf("Game Size > 10")
+	}		
+	if game[9].firstThrow == 10{
+		//@TODO: Ask user to add the next two balls
+	}else{
+		if game[9].firstThrow + game[9].secondThrow == 10{
+			//@TODO: Ask user to add the next ball
+		}
 	}
 
 	for i := 0; i < len(game); i++ {
@@ -26,7 +35,31 @@ func GetScore(game []Frame) (int, error) {
 		if game[i].firstThrow + game[i].secondThrow > 10{
 			return 0, fmt.Errorf("Value Error : Frame > 10")
 		}
-        //score = score + game[i].firstThrow + game[i].secondThrow
+		if game[i].firstThrow + game[i].secondThrow > 10{
+			return 0, fmt.Errorf("Value Error : Frame > 10")
+		}
+		if game[i].firstThrow == 10 {   //Calcule des strikes
+			if i < 9 && game[i+1].firstThrow < 10 { 
+				score = score + game[i].firstThrow + game[i+1].firstThrow + game[i+1].secondThrow //cas d'un simple strike 
+			}
+			if i < 8 && game[i+1].firstThrow == 10 { 
+				score = score + game[i].firstThrow + game[i+1].firstThrow +  game[i+2].firstThrow // cas de deux strike consécutif
+			}
+			if i == 9 { 
+				score = score + game[9].firstThrow + onze + douze //cas d'un strike à dizième frame
+			}
+			if i < 8 && game[9].firstThrow == 10 { 
+				score = score + game[8].firstThrow + game[9].firstThrow + onze // cas d'un strike à la neuvième et dizième frame
+			}		
+		}else if game[i].firstThrow + game[i].secondThrow == 10 {   //Calcule des spares
+				if i < 9 { 
+					score = score + game[i].firstThrow  + game[i].secondThrow + game[i+1].firstThrow
+				} else if i == 9 { 
+					score = score + game[9].firstThrow + onze //cas d'un spare à la dizième frame
+				}		
+		}else{
+        	score = score + game[i].firstThrow + game[i].secondThrow			
+		}
 	}
 	return score, nil
 }
