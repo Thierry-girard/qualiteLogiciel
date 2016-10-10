@@ -7,27 +7,40 @@ type Frame struct {
 	secondThrow int
 }
 
-func GetScore(game []Frame) (int, error) {
+func GetScore(game []Frame, bonus Frame) (int, error) {
 	score := 0
-	onze := 7
-	douze := 2
-    if len(game) == 0  || game == nil {
-        return 0, fmt.Errorf("Game is empty")
-    }
+    onze := 0
+    douze := 0
+    
 	if len(game) < 10{
 		return 0, fmt.Errorf("Game Size < 10")
 	}
 	if len(game) > 10{
 		return 0, fmt.Errorf("Game Size > 10")
 	}		
-	if game[9].firstThrow == 10{
+	if game[9].firstThrow == 10 || game[9].firstThrow + game[9].secondThrow == 10{    
+		if (bonus != Frame{}){
+           onze = bonus.firstThrow
+	       douze = bonus.secondThrow
+        }else{
+		    return 0, fmt.Errorf("Bonus is empty")
+        }
+	}
+    if (onze > 10 || douze > 10){
+        return 0, fmt.Errorf("Value Error : Frame > 10")
+    }
+    if (onze < 0 || douze < 0){
+        return 0, fmt.Errorf("Negative value")
+    }
+
+    /*if game[9].firstThrow == 10{
 		fmt.Scan(&onze)
         fmt.Scan(&douze)
 	}else{
 		if game[9].firstThrow + game[9].secondThrow == 10{
 			fmt.Scan(&onze)
 		}
-	}
+	}*/
 
 	for i := 0; i < len(game); i++ {
 		if game[i].firstThrow < 0 || game[i].secondThrow < 0{
@@ -58,12 +71,6 @@ func GetScore(game []Frame) (int, error) {
 		}else{
         	score = score + game[i].firstThrow + game[i].secondThrow	
         }       
-        if(onze > 10 || douze > 10){
-            return 0, fmt.Errorf("Value Error : Frame > 10")
-        }
-        if(onze < 0 || douze < 0){
-            return 0, fmt.Errorf("Negative value")
-        }
 	}
 	return score, nil
 }
